@@ -23,16 +23,46 @@
     <!-- Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Custom Animations for Hero Section */
+        /* Custom Animations for Hero Section and General Elements */
         @keyframes fadeInFromBottom {
             from {
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
 
@@ -40,9 +70,25 @@
             animation: fadeInFromBottom 1s ease-out forwards;
         }
 
-            .animate-fade-in-up.delay-200 {
-                animation-delay: 0.2s;
-            }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-slide-in-left {
+            animation: slideInLeft 1s ease-out forwards;
+        }
+
+        .animate-slide-in-right {
+            animation: slideInRight 1s ease-out forwards;
+        }
+
+        /* Delay utilities for staggered animations */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
 
         /* Responsive adjustments for hero text size */
         @media (max-width: 767px) {
@@ -54,12 +100,49 @@
                 font-size: 1.25rem; /* Smaller on mobile */
             }
         }
+
+        /* Base styles for scroll reveal elements - hidden by default */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-on-scroll.slide-left {
+            transform: translateX(-50px);
+        }
+
+        .reveal-on-scroll.slide-right {
+            transform: translateX(50px);
+        }
+
+        .reveal-on-scroll.slide-left.active {
+            transform: translateX(0);
+        }
+
+        .reveal-on-scroll.slide-right.active {
+            transform: translateX(0);
+        }
+
+        /* Hover effects for cards */
+        .card-hover-effect {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body class="min-h-screen bg-black text-white font-sans overflow-x-hidden">
 
     <!-- Navigation Bar -->
-    <nav class="absolute top-0 left-0 right-0 z-50 p-6 md:p-8">
+    <nav class="absolute top-0 left-0 right-0 z-50 p-6 md:p-8 animate-fade-in">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo/Name -->
             <a href="#hero" class="text-3xl md:text-4xl font-extrabold text-white hover:opacity-80 transition duration-300 tracking-wide">
@@ -126,10 +209,10 @@
     <!-- Gallery Section (formerly Music Section) -->
     <section id="gallery" class="py-16 md:py-24 bg-black text-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 md:mb-16">FEATURED WORK</h2>
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 md:mb-16 reveal-on-scroll">FEATURED WORK</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
                 <!-- Photo Card 1 -->
-                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out">
+                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden reveal-on-scroll card-hover-effect">
                     <img src="https://placehold.co/600x400/333333/ffffff?text=Landscape+Photo+1" alt="Landscape Photo 1" class="w-full h-auto object-cover" />
                     <div class="p-6">
                         <h3 class="text-2xl font-semibold mb-2">Majestic Mountains</h3>
@@ -146,7 +229,7 @@
                     </div>
                 </div>
                 <!-- Photo Card 2 -->
-                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out">
+                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden reveal-on-scroll card-hover-effect delay-200">
                     <img src="https://placehold.co/600x400/444444/ffffff?text=Portrait+Photo+1" alt="Portrait Photo 1" class="w-full h-auto object-cover" />
                     <div class="p-6">
                         <h3 class="text-2xl font-semibold mb-2">Urban Gaze</h3>
@@ -163,7 +246,7 @@
                     </div>
                 </div>
                 <!-- Photo Card 3 -->
-                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out">
+                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden reveal-on-scroll card-hover-effect delay-400">
                     <img src="https://placehold.co/600x400/555555/ffffff?text=Event+Photo+1" alt="Event Photo 1" class="w-full h-auto object-cover" />
                     <div class="p-6">
                         <h3 class="text-2xl font-semibold mb-2">Joyful Celebration</h3>
@@ -180,7 +263,7 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-12">
+            <div class="text-center mt-12 reveal-on-scroll delay-600">
                 <a href="#" class="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 text-lg">
                     VIEW FULL GALLERY
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image ml-2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
@@ -192,11 +275,11 @@
     <!-- About Section -->
     <section id="about" class="py-16 md:py-24 bg-gray-950 text-white">
         <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
-            <div class="lg:w-1/2">
+            <div class="lg:w-1/2 reveal-on-scroll slide-left">
                 <!-- Image source for Tony Dunkle Profile - Updated to unnamed.jpg -->
                 <img src="unnamed.jpg" alt="Tony Dunkle Profile" class="rounded-lg shadow-xl w-full h-auto object-cover" />
             </div>
-            <div class="lg:w-1/2 text-center lg:text-left">
+            <div class="lg:w-1/2 text-center lg:text-left reveal-on-scroll slide-right delay-200">
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">ABOUT TONY DUNKLE</h2>
                 <p class="text-lg md:text-xl leading-relaxed text-gray-300 mb-6">
                     Tony Dunkle is a passionate photographer dedicated to capturing the beauty and emotion of every moment. With a keen eye for detail and a deep understanding of light and composition, Tony creates stunning images that tell a story. Specializing in landscape, portrait, and event photography, he strives to deliver timeless photographs that clients will cherish for years to come.
@@ -211,11 +294,11 @@
     <!-- Contact Section -->
     <section id="contact" class="py-16 md:py-24 bg-black text-white">
         <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-8">GET IN TOUCH</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 reveal-on-scroll">GET IN TOUCH</h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto reveal-on-scroll delay-100">
                 Ready to capture your special moments? Contact Tony Dunkle Photography for inquiries, bookings, or collaborations.
             </p>
-            <div class="flex flex-col items-center space-y-6">
+            <div class="flex flex-col items-center space-y-6 reveal-on-scroll delay-200">
                 <a href="mailto:info@tonydunklephotography.com" class="inline-flex items-center px-8 py-4 bg-gray-800 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition duration-300 text-lg">
                     <!-- Mail Icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail mr-3"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
@@ -282,6 +365,28 @@
 
         // Set current year in footer
         currentYearSpan.textContent = new Date().getFullYear();
+
+        // Intersection Observer for scroll-reveal animations
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        const observerOptions = {
+            root: null, // viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
     </script>
 </body>
 </html>
