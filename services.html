@@ -132,6 +132,42 @@
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
         }
+
+        /* Table styling for pricing */
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background-color: #1a202c; /* gray-900 */
+            border-radius: 0.5rem; /* rounded-lg */
+            overflow: hidden;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #2d3748; /* gray-800 */
+        }
+
+        .pricing-table th {
+            background-color: #2d3748; /* gray-800 */
+            font-weight: 600; /* font-semibold */
+            color: #e2e8f0; /* gray-200 */
+            text-transform: uppercase;
+            font-size: 0.875rem; /* text-sm */
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .pricing-table tbody tr:hover {
+            background-color: #2d3748; /* gray-800 */
+            transition: background-color 0.2s ease-in-out;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-black text-white font-sans overflow-x-hidden">
@@ -343,6 +379,20 @@
                 </div>
             </div>
 
+            <!-- Pricing Details Section -->
+            <section id="pricing" class="py-16 md:py-24">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12 md:mb-16 reveal-on-scroll">PRICING DETAILS</h2>
+                    <div id="pricing-table-container" class="reveal-on-scroll delay-200">
+                        <!-- Pricing table will be loaded here by JavaScript -->
+                        <p class="text-gray-400">Loading pricing information...</p>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-8 reveal-on-scroll delay-300">
+                        *All prices are starting points and may vary based on specific requirements and customization. Please contact us for a personalized quote.
+                    </p>
+                </div>
+            </section>
+
         </div>
     </section>
 
@@ -362,6 +412,7 @@
         const closeIcon = document.getElementById('close-icon');
         const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
         const currentYearSpan = document.getElementById('current-year-services'); // Unique ID for this page's footer year
+        const pricingTableContainer = document.getElementById('pricing-table-container');
 
         // Function to toggle mobile menu visibility
         function toggleMobileMenu() {
@@ -392,6 +443,52 @@
         // Set current year in footer
         currentYearSpan.textContent = new Date().getFullYear();
 
+        // Function to load and parse CSV
+        async function loadPricingCSV() {
+            try {
+                const response = await fetch('pricing.csv');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const csvText = await response.text();
+                parseCSVAndRenderTable(csvText);
+            } catch (error) {
+                console.error("Error loading pricing CSV:", error);
+                pricingTableContainer.innerHTML = '<p class="text-red-400">Failed to load pricing information. Please try again later.</p>';
+            }
+        }
+
+        // Function to parse CSV text and render an HTML table
+        function parseCSVAndRenderTable(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length === 0) {
+                pricingTableContainer.innerHTML = '<p class="text-gray-400">No pricing data available.</p>';
+                return;
+            }
+
+            const headers = lines[0].split(',').map(header => header.trim());
+            const data = lines.slice(1).map(line => line.split(',').map(item => item.trim()));
+
+            let tableHTML = '<table class="pricing-table">';
+            tableHTML += '<thead><tr>';
+            headers.forEach(header => {
+                tableHTML += `<th>${header}</th>`;
+            });
+            tableHTML += '</tr></thead>';
+            tableHTML += '<tbody>';
+
+            data.forEach(row => {
+                tableHTML += '<tr>';
+                row.forEach(cell => {
+                    tableHTML += `<td>${cell}</td>`;
+                });
+                tableHTML += '</tr>';
+            });
+
+            tableHTML += '</tbody></table>';
+            pricingTableContainer.innerHTML = tableHTML;
+        }
+
         // Intersection Observer for scroll-reveal animations
         const revealElements = document.querySelectorAll('.reveal-on-scroll');
 
@@ -405,6 +502,10 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    // For the pricing table, load it once its container is visible
+                    if (entry.target.id === 'pricing-table-container') {
+                        loadPricingCSV();
+                    }
                     observer.unobserve(entry.target); // Stop observing once animated
                 }
             });
@@ -412,6 +513,15 @@
 
         revealElements.forEach(element => {
             observer.observe(element);
+        });
+
+        // Initial load for elements that might be in view immediately
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if pricing table container is already in view on load
+            const pricingContainer = document.getElementById('pricing-table-container');
+            if (pricingContainer && pricingContainer.getBoundingClientRect().top < window.innerHeight) {
+                loadPricingCSV();
+            }
         });
     </script>
 </body>
