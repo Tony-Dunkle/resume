@@ -1,357 +1,287 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tony Dunkle | Interactive Resume</title>
+    <title>Tony Dunkle Photography</title>
+
+    <!-- Open Graph Meta Tags for Social Media Embeds -->
+    <meta property="og:title" content="Tony Dunkle Photography Official Site">
+    <meta property="og:description" content="Explore the captivating world through the lens of Tony Dunkle Photography. Specializing in landscape, portrait, and event photography.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-github-pages-url.github.io/tony-dunkle-photography/"> <!-- IMPORTANT: Update this with your actual GitHub Pages URL -->
+    <meta property="og:image" content="https://placehold.co/1200x630/333333/ffffff?text=Tony+Dunkle+Photography">
+    <!-- Twitter Card Meta Tags (optional, but good for Twitter) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tony Dunkle Photography">
+    <meta name="twitter:description" content="Explore the captivating world through the lens of Tony Dunkle Photography. Specializing in landscape, portrait, and event photography.">
+    <meta name="twitter:image" content="https://placehold.co/1200x675/333333/ffffff?text=Tony+Dunkle+Photography">
+
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Cool Slate & Mint Accent -->
-    <!-- Application Structure Plan: The application is structured as a single-page portfolio with a fixed navigation bar for easy access to distinct content sections (Home/Summary, Experience, Skills, Education). This component-based structure was chosen over a linear document to allow recruiters to quickly navigate to the information most relevant to them. The key interactions—clickable tabs for job details and a dynamic skills chart—are designed to present dense information in a digestible, non-overwhelming format, improving user engagement and information retention. -->
-    <!-- Visualization & Content Choices: 
-        - Summary: Report Info -> Professional Summary -> Goal: Inform -> Method: Prominent text block with key stat cards (HTML/Tailwind) -> Interaction: Static -> Justification: Provides an immediate, high-level overview of qualifications.
-        - Work Experience: Report Info -> Job History & Duties -> Goal: Organize/Compare -> Method: Vertical tabbed interface (HTML/JS) -> Interaction: User clicks a job title to reveal its details -> Justification: Prevents a long, intimidating list of text. Allows focused exploration of each role.
-        - Skills: Report Info -> List of skills -> Goal: Visualize/Compare/Engage -> Method: Radar Chart -> Interaction: Hover tooltips show skill names. -> Justification: A radar chart offers a more compelling and modern visual comparison of diverse skill sets than a simple list. Library: Chart.js. Additionally, a detailed categorized list of all skills is provided below the chart for comprehensive review.
-        - Education: Report Info -> Schooling -> Goal: Inform -> Method: Simple text block (HTML/Tailwind) -> Interaction: Static -> Justification: Straightforward presentation for concise information.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 450px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 450px;
+        /* Custom Animations for Hero Section */
+        @keyframes fadeInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-        .nav-link {
-            transition: color 0.3s, border-bottom-color 0.3s;
+
+        .animate-fade-in-up {
+            animation: fadeInFromBottom 1s ease-out forwards;
         }
-        .tab-btn.active {
-            border-color: #6ee7b7; /* emerald-300 */
-            background-color: #ecfdf5; /* emerald-50 */
-            color: #065f46; /* emerald-800 */
+
+            .animate-fade-in-up.delay-200 {
+                animation-delay: 0.2s;
+            }
+
+        /* Responsive adjustments for hero text size */
+        @media (max-width: 767px) {
+            #hero h1 {
+                font-size: 3.5rem; /* Smaller on mobile */
+            }
+
+            #hero p {
+                font-size: 1.25rem; /* Smaller on mobile */
+            }
         }
     </style>
 </head>
-<body class="text-slate-700">
+<body class="min-h-screen bg-black text-white font-sans overflow-x-hidden">
 
-    <nav class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <a href="#home" class="text-xl font-bold text-slate-800">Tony Dunkle</a>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#home" class="nav-link text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                        <a href="#experience" class="nav-link text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Experience</a>
-                        <a href="#skills" class="nav-link text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Skills</a>
-                        <a href="#education" class="nav-link text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-                    </div>
-                </div>
-                <div class="-mr-2 flex md:hidden">
-                    <button id="mobile-menu-button" type="button" class="bg-slate-100 inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-emerald-600 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 focus:ring-emerald-500" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
+    <!-- Navigation Bar -->
+    <nav class="absolute top-0 left-0 right-0 z-50 p-6 md:p-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo/Name -->
+            <a href="#hero" class="text-3xl md:text-4xl font-extrabold text-white hover:opacity-80 transition duration-300 tracking-wide">
+                TONY DUNKLE PHOTOGRAPHY
+            </a>
+
+            <!-- Desktop Navigation (hidden on mobile) -->
+            <div class="hidden md:flex space-x-8 text-lg">
+                <a href="#gallery" class="hover:text-gray-400 transition duration-300">GALLERY</a>
+                <a href="#about" class="hover:text-gray-400 transition duration-300">ABOUT</a>
+                <a href="#contact" class="hover:text-gray-400 transition duration-300">CONTACT</a>
+                <a href="services.html" class="hover:text-gray-400 transition duration-300">SERVICES</a>
+            </div>
+
+            <!-- Mobile Menu Button (hidden on desktop) -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <!-- Menu Icon SVG -->
+                    <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg>
+                    <!-- Close Icon SVG -->
+                    <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hidden"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                </button>
             </div>
         </div>
-        <div class="hidden md:hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="nav-link text-slate-600 hover:text-emerald-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
-                <a href="#experience" class="nav-link text-slate-600 hover:text-emerald-600 block px-3 py-2 rounded-md text-base font-medium">Experience</a>
-                <a href="#skills" class="nav-link text-slate-600 hover:text-emerald-600 block px-3 py-2 rounded-md text-base font-medium">Skills</a>
-                <a href="#education" class="nav-link text-slate-600 hover:text-emerald-600 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-95 flex flex-col items-center justify-center space-y-8 text-3xl font-bold z-40 hidden">
+            <a href="#gallery" class="hover:text-gray-400 transition duration-300 mobile-menu-link">GALLERY</a>
+            <a href="#about" class="hover:text-gray-400 transition duration-300 mobile-menu-link">ABOUT</a>
+            <a href="#contact" class="hover:text-gray-400 transition duration-300 mobile-menu-link">CONTACT</a>
+            <a href="services.html" class="hover:text-gray-400 transition duration-300 mobile-menu-link">SERVICES</a>
+            <div class="flex space-x-6 mt-8">
+                <!-- Social Icons SVGs -->
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-gray-400 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="hover:text-gray-400 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17-19 11.6 9.2-1 14.3-5 17-8 0 0 1.8-3.3 2.8-6.5z" /></svg>
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="hover:text-gray-400 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+                </a>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Hero Section -->
+    <section id="hero" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+        <!-- Background Image Placeholder - Replace with a relevant photography image -->
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+             style="background-image: url('https://placehold.co/1920x1080/333333/ffffff?text=Captivating+Photography');">
+            <div class="absolute inset-0 bg-black opacity-50"></div> <!-- Dark overlay -->
+        </div>
+        <div class="relative z-10 p-4">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-tight mb-4 animate-fade-in-up">
+                TONY DUNKLE PHOTOGRAPHY
+            </h1>
+            <p class="text-lg md:text-2xl font-light opacity-90 animate-fade-in-up delay-200">
+                Capturing Moments, Creating Memories
+            </p>
+        </div>
+    </section>
 
-        <section id="home" class="min-h-[60vh] flex items-center">
-            <div class="w-full flex flex-col md:flex-row items-center md:items-start gap-8">
-                <div class="flex-shrink-0">
-                    <img src="unnamed.jpg" alt="Tony Dunkle" class="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-white" onerror="this.onerror=null;this.src='https://placehold.co/150x150/e2e8f0/64748b?text=No+Image+Available';">
-                </div>
-                <div class="flex-grow">
-                    <h1 class="text-4xl md:text-6xl font-bold text-slate-800 leading-tight">Tony Dunkle</h1>
-                    <p class="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl">Hardworking and dedicated customer service professional with 3 years of experience in high-pressure environments, including corrections and retail.</p>
-                    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl">
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200"><p class="font-semibold text-emerald-700">Proven Safety & Security Record</p></div>
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200"><p class="font-semibold text-emerald-700">Strong Leadership & Collaboration</p></div>
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200"><p class="font-semibold text-emerald-700">Customer Satisfaction Focus</p></div>
-                    </div>
-                     <div class="mt-6 text-sm text-slate-500">
-                        <p><strong>Willing to relocate to:</strong> Oil City, PA | Franklin, PA | Cranberry Township, PA</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="experience" class="py-16 md:py-24">
-            <h2 class="text-3xl font-bold text-slate-800 text-center">Work Experience</h2>
-            <p class="mt-2 text-lg text-slate-600 text-center max-w-2xl mx-auto">A timeline of my professional roles. Click on a title to see the details.</p>
-            <div class="mt-12 flex flex-col md:flex-row gap-8">
-                <div id="tabs-container" class="flex md:flex-col md:w-1/3 space-x-2 md:space-x-0 md:space-y-2 overflow-x-auto pb-2">
-                </div>
-                <div id="tab-content-container" class="md:w-2/3">
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="py-16 md:py-24 bg-white rounded-2xl">
-             <h2 class="text-3xl font-bold text-slate-800 text-center">Core Competencies</h2>
-             <p class="mt-2 text-lg text-slate-600 text-center max-w-2xl mx-auto">A visual representation of my key skills, developed across various demanding roles.</p>
-            <div class="mt-12 chart-container">
-                <canvas id="skillsChart"></canvas>
-            </div>
-
-            <div class="mt-16 pt-8 border-t border-slate-200">
-                <h3 class="text-2xl font-bold text-slate-800 text-center mb-6">Additional Skills</h3>
-                <div id="additional-skills-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-slate-600">
-                    <div>
-                        <h4 class="font-semibold text-slate-700 mb-2">Management & Resolution</h4>
-                        <ul class="list-disc list-inside space-y-1">
-                            <li>Cash Management (2 years)</li>
-                            <li>Time Management (4 years)</li>
-                            <li>Complaint Resolution (2 years)</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-slate-700 mb-2">Operational & Technical</h4>
-                        <ul class="list-disc list-inside space-y-1">
-                            <li>Microsoft Office</li>
-                            <li>Computer Skills</li>
-                            <li>Order Picking</li>
-                            <li>Order Fulfillment</li>
-                            <li>Heavy Lifting</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-slate-700 mb-2">Interpersonal & Support</h4>
-                        <ul class="list-disc list-inside space-y-1">
-                            <li>Organizational Skills</li>
-                            <li>Intake Experience</li>
-                            <li>Serving Experience</li>
-                            <li>Senior Care</li>
-                            <li>Cashiering</li>
-                            <li>Writing Skills</li>
-                        </ul>
+    <!-- Gallery Section (formerly Music Section) -->
+    <section id="gallery" class="py-16 md:py-24 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 md:mb-16">FEATURED WORK</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <!-- Photo Card 1 -->
+                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://placehold.co/600x400/333333/ffffff?text=Landscape+Photo+1" alt="Landscape Photo 1" class="w-full h-auto object-cover" />
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2">Majestic Mountains</h3>
+                        <p class="text-gray-400 mb-4">Category: Landscape | Location: Rockies</p>
+                        <div class="flex justify-center space-x-4">
+                            <!-- Camera Icon SVG -->
+                            <a href="#" class="text-white hover:text-indigo-400 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                            </a>
+                            <a href="#" class="text-white hover:text-indigo-400 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="education" class="py-16 md:py-24">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-slate-800">Education</h2>
-                <div class="mt-6 inline-block bg-white p-8 rounded-lg shadow-sm border border-slate-200">
-                    <p class="text-xl font-semibold text-slate-700">High School Education</p>
-                    <p class="text-slate-600 mt-1">Pennsylvania Cyber Charter School</p>
-                    <p class="text-sm text-slate-500">Franklin, PA</p>
+                <!-- Photo Card 2 -->
+                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://placehold.co/600x400/444444/ffffff?text=Portrait+Photo+1" alt="Portrait Photo 1" class="w-full h-auto object-cover" />
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2">Urban Gaze</h3>
+                        <p class="text-gray-400 mb-4">Category: Portrait | Subject: City Life</p>
+                        <div class="flex justify-center space-x-4">
+                            <!-- Camera Icon SVG -->
+                            <a href="#" class="text-white hover:text-indigo-400 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                            </a>
+                            <a href="#" class="text-white hover:text-indigo-400 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Photo Card 3 -->
+                <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://placehold.co/600x400/555555/ffffff?text=Event+Photo+1" alt="Event Photo 1" class="w-full h-auto object-cover" />
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2">Joyful Celebration</h3>
+                        <p class="text-gray-400 mb-4">Category: Event | Occasion: Wedding</p>
+                        <div class="flex justify-center space-x-4">
+                            <!-- Camera Icon SVG -->
+                            <a href="#" class="text-white hover:text-indigo-400 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                            </a>
+                            <a href="#" class="text-white hover:text-indigo-400 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <footer class="bg-slate-800 text-slate-300">
-        <div id="contact" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-            <h2 class="text-2xl font-bold text-white">Get In Touch</h2>
-            <p class="mt-4">I'm currently seeking new opportunities and would love to hear from you.</p>
-            <div class="mt-6 flex justify-center items-center space-x-6">
-                <a href="mailto:tony.dunkle.e@gmail.com" class="hover:text-emerald-300 transition-colors">+1 814 547 4014</a>
-                <span class="text-slate-500">|</span>
-                <a href="mailto:tony.dunkle.e@gmail.com" class="hover:text-emerald-300 transition-colors">tony.dunkle.e@gmail.com</a>
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 text-lg">
+                    VIEW FULL GALLERY
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image ml-2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
+                </a>
             </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 md:py-24 bg-gray-950 text-white">
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
+            <div class="lg:w-1/2">
+                <!-- Image source for Tony Dunkle Profile - Replace with an actual photo -->
+                <img src="https://placehold.co/600x600/666666/ffffff?text=Tony+Dunkle+Profile" alt="Tony Dunkle Profile" class="rounded-lg shadow-xl w-full h-auto object-cover" />
+            </div>
+            <div class="lg:w-1/2 text-center lg:text-left">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">ABOUT TONY DUNKLE</h2>
+                <p class="text-lg md:text-xl leading-relaxed text-gray-300 mb-6">
+                    Tony Dunkle is a passionate photographer dedicated to capturing the beauty and emotion of every moment. With a keen eye for detail and a deep understanding of light and composition, Tony creates stunning images that tell a story. Specializing in landscape, portrait, and event photography, he strives to deliver timeless photographs that clients will cherish for years to come.
+                </p>
+                <p class="text-lg md:text-xl leading-relaxed text-gray-300">
+                    From breathtaking natural vistas to intimate portraits and lively events, Tony approaches each project with creativity and professionalism. His commitment to excellence ensures a unique and personalized experience for every client.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 md:py-24 bg-black text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">GET IN TOUCH</h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+                Ready to capture your special moments? Contact Tony Dunkle Photography for inquiries, bookings, or collaborations.
+            </p>
+            <div class="flex flex-col items-center space-y-6">
+                <a href="mailto:info@tonydunklephotography.com" class="inline-flex items-center px-8 py-4 bg-gray-800 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition duration-300 text-lg">
+                    <!-- Mail Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail mr-3"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
+                    EMAIL TONY
+                </a>
+                <div class="flex space-x-6 mt-8">
+                    <!-- Social Icons SVGs -->
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17-19 11.6 9.2-1 14.3-5 17-8 0 0 1.8-3.3 2.8-6.5z" /></svg>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 py-8 text-gray-400 text-center text-sm">
+        <div class="container mx-auto px-4">
+            <p>&copy; <span id="current-year"></span> Tony Dunkle Photography. All Rights Reserved.</p>
+            <p class="mt-2">Capturing moments, creating memories.</p>
         </div>
     </footer>
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const openIcon = mobileMenuButton.querySelector('svg:first-child');
-            const closeIcon = mobileMenuButton.querySelector('svg:last-child');
+        // Get references to elements
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+        const currentYearSpan = document.getElementById('current-year');
 
-            mobileMenuButton.addEventListener('click', () => {
-                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-                mobileMenu.classList.toggle('hidden');
-                openIcon.classList.toggle('hidden');
-                closeIcon.classList.toggle('hidden');
-            });
-            
-            const workExperienceData = [
-                {
-                    title: 'Activities Assistant',
-                    company: 'The Caring Place',
-                    date: 'Apr 2025 – Present',
-                    details: [
-                        'Planned and executed a wide range of activities and events for diverse groups of seniors, enhancing participant engagement.',
-                        'Collaborated with team members to develop creative and engaging activity programs that catered to participant interests and needs.',
-                        'Implemented innovative ideas to enhance the quality of activities offered, resulting in increased participation rates.',
-                        'Created detailed activity plans outlining objectives, materials needed, timelines, and expected outcomes.',
-                        'Evaluated participant feedback regularly to assess program effectiveness and make necessary adjustments for improvement.'
-                    ]
-                },
-                {
-                    title: 'Corrections Officer',
-                    company: 'County of Venango',
-                    date: 'Oct 2024 – Mar 2025',
-                    details: [
-                        'Maintained security and order within the correctional facility, ensuring the safety of staff and inmates.',
-                        'Conducted regular inspections of cells, common areas, and inmate activities to prevent contraband possession.',
-                        'Supervised inmate movement during daily routines such as meals, recreation time, and visitation hours.',
-                        'Responded promptly to emergencies, taking appropriate action to de-escalate situations.',
-                        'Documented all incidents, observations, and interactions in detailed reports for administrative purposes.',
-                        'Implemented effective communication skills to diffuse conflicts among inmates through mediation techniques.',
-                        'Provided guidance and support to newly hired officers during their training period.'
-                    ]
-                },
-                {
-                    title: 'Digital Personal Shopper',
-                    company: 'Walmart',
-                    date: 'Jan 2024 – Oct 2024',
-                    details: [
-                        'Provided exceptional customer service by greeting and assisting customers in a friendly and professional manner.',
-                        'Resolved customer complaints or concerns promptly and effectively to ensure satisfaction.',
-                        'Trained new hires on company procedures including register operation and customer service best practices.',
-                        'Efficiently picked and packed customer orders according to order specifications.',
-                        'Collaborated with loss prevention team to identify potential theft risks, resulting in a decrease in shrinkage.'
-                    ]
-                }
-            ];
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const isHidden = mobileMenuOverlay.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenuOverlay.classList.remove('hidden');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                mobileMenuOverlay.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
 
-            const tabsContainer = document.getElementById('tabs-container');
-            const contentContainer = document.getElementById('tab-content-container');
+        // Add event listener to the mobile menu button
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
 
-            workExperienceData.forEach((job, index) => {
-                const tabButton = document.createElement('button');
-                tabButton.className = 'tab-btn text-left p-4 rounded-lg border-2 border-transparent w-full transition-all duration-200 hover:bg-slate-100';
-                tabButton.innerHTML = `<p class="font-bold text-slate-800">${job.title}</p><p class="text-sm text-slate-500">${job.company}</p>`;
-                tabButton.dataset.index = index;
-                if (index === 0) {
-                    tabButton.classList.add('active');
-                }
-                tabsContainer.appendChild(tabButton);
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'tab-content bg-white p-6 rounded-lg shadow-sm border border-slate-200';
-                if (index !== 0) {
-                    contentDiv.classList.add('hidden');
-                }
-                let detailsHtml = `<h3 class="text-xl font-bold text-slate-800">${job.title}</h3><p class="text-sm text-slate-500 mb-4">${job.date}</p><ul class="space-y-3 list-disc list-inside text-slate-600">`;
-                job.details.forEach(detail => {
-                    detailsHtml += `<li>${detail}</li>`;
-                });
-                detailsHtml += `</ul>`;
-                contentDiv.innerHTML = detailsHtml;
-                contentDiv.dataset.index = index;
-                contentContainer.appendChild(contentDiv);
-            });
-
-            tabsContainer.addEventListener('click', (e) => {
-                const button = e.target.closest('.tab-btn');
-                if (!button) return;
-
-                const index = button.dataset.index;
-
-                tabsContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                contentContainer.querySelectorAll('.tab-content').forEach(content => {
-                    if (content.dataset.index === index) {
-                        content.classList.remove('hidden');
-                    } else {
-                        content.classList.add('hidden');
-                    }
-                });
-            });
-
-            const ctx = document.getElementById('skillsChart').getContext('2d');
-            const skillsChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: [
-                        'Customer Service',
-                        'Safety & Security', 
-                        'Leadership', 
-                        'Communication', 
-                        'Problem Solving', 
-                        'Team Collaboration',
-                        'Process Adherence'
-                    ],
-                    datasets: [{
-                        label: 'Proficiency',
-                        data: [5, 5, 4, 5, 4, 5, 4],
-                        backgroundColor: 'rgba(110, 231, 183, 0.2)',
-                        borderColor: 'rgba(16, 185, 129, 1)',
-                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            pointLabels: {
-                                font: {
-                                    size: 14,
-                                    family: "'Inter', sans-serif"
-                                },
-                                color: '#334155' // slate-700
-                            },
-                            ticks: {
-                                backdropColor: 'rgba(248, 250, 252, 0)',
-                                color: '#64748b', //slate-500
-                                stepSize: 1,
-                                font: {
-                                    size: 10
-                                }
-                            },
-                             min: 0,
-                             max: 5
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
+        // Add event listeners to mobile menu links to close the menu when clicked
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuOverlay.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
             });
         });
 
+        // Set current year in footer
+        currentYearSpan.textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
